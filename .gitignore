@@ -1,0 +1,124 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+# File temporanei creati dall'IDE o dal sistema operativo
+*.class
+*.log
+*.swp
+*.tmp
+*.tmp.*
+*.bak
+*.cache
+*.diff
+*.patch
+*.orig
+*.pyc
+*.pyo
+
+# File di configurazione dell'IDE
+.settings/
+.classpath
+.project
+
+# Output del processo di build
+bin/
+build/
+target/
+
+# File generati automaticamente durante la compilazione
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# File di dipendenze e configurazione specifici per l'ambiente di sviluppo
+.idea/
+.gradle/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.prefs
+
+# Cartella del server locale o del container (es. Tomcat)
+.tomcat/
+.jetty/
+
+# File di configurazione specifici del sistema operativo
+.DS_Store
+Thumbs.db
+
+# File e cartelle specifiche per i progetti Spring
+# Ignora i file delle librerie e i risultati della compilazione
+lib/
+logs/
+*.log
+tmp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+
+# Ignora i file di configurazione dell'IDE
+*.idea/
+*.classpath
+*.project
+*.settings/
+
+# Ignora le directory del build system
+mvn/
+target/
+build/
+
+# Ignora i file di configurazione specifici di Spring Boot
+spring-boot-configuration-metadata.json
+
+# Ignora i file di output della build di Gradle e Maven
+.gradle/
+.build/
+*.jar
+*.war
+*.ear
+
+# Ignora i file di log e le cartelle temporanee
+*.log
+*.tmp/
+tmp/
+
+# Ignora le cartelle di configurazione del server locale
+.tomcat/
+.jetty/
