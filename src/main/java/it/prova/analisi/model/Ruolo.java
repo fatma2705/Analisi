@@ -33,4 +33,8 @@ public class Ruolo {
 	@Column(name = "descrizione")
 	private String descrizione;
 
+	public Ruolo(Long id) {
+		this.id = id;
+	}
+
 }
