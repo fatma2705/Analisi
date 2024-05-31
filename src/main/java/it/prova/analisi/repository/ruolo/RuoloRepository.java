@@ -1,4 +1,4 @@
-package it.prova.analisi.ruolo;
+package it.prova.analisi.repository.ruolo;
 
 import org.springframework.data.repository.CrudRepository;
 
