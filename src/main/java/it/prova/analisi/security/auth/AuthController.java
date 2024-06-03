@@ -1,6 +1,5 @@
 package it.prova.analisi.security.auth;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public class AuthController {
 			String token = jwtUtil.generateToken(body.getUsername());
 
 			// Respond with the JWT
-			return Collections.singletonMap("jwt-token", token);
+			return Collections.singletonMap("jwt.token", token);
 
 		} catch (AuthenticationException authExc) {
 			// Auhentication Failed

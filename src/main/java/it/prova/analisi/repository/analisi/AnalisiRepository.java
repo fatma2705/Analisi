@@ -9,10 +9,10 @@ import it.prova.analisi.model.Analisi;
 
 public interface AnalisiRepository extends CrudRepository<Analisi, Long> {
 
-	@Query(" select a from Analisi a left join fetch a.utente u where u.username=:username")
+	@Query(" select a from Analisi a left join fetch a.paziente u where u.username=:username")
 	public List<Analisi> listAllAnalisiOfUtente(String username);
 
-	@Query(" select a from Analisi a left join fetch a.utente u where a.id=:id")
+	@Query(" select a from Analisi a left join fetch a.paziente u where a.id=:id")
 	public Analisi findByIdEager(Long id);
 
 }
