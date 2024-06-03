@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -40,14 +41,16 @@ public class SecurityConfig {
 	@Bean // Indicates that this method returns a Spring bean.
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()) // Disables CSRF protection, common in stateless REST APIs.
-				.cors(cors -> cors.disable()).authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated() // Ensures
+				.cors(cors -> cors.disable()).authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/api/auth/login").permitAll()
+						.anyRequest().authenticated() // Ensures
 																														// all
 																														// requests
 																														// are
 																														// authenticated.
 				).httpBasic(withDefaults()) // Enables HTTP Basic Authentication with default settings.
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Configures
-																												// session
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class );																				// session
 																												// management
 																												// to be
 																												// stateless.

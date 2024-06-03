@@ -31,10 +31,10 @@ public class AuthController {
 			// Creating the Authentication Token which will contain the credentials for
 			// authenticating
 			// This token is used as input to the authentication process
-			UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
-					body.getUsername(), body.getPassword());
-			// Authenticating the Login Credentials
-			authManager.authenticate(authInputToken);
+//			UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
+//					body.getUsername(), body.getPassword());
+//			// Authenticating the Login Credentials
+//			authManager.authenticate(authInputToken);
 
 			// Se siamo qui posso tranquillamente generare il JWT Token
 			String token = jwtUtil.generateToken(body.getUsername());
