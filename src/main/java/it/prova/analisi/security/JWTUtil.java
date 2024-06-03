@@ -3,6 +3,7 @@ package it.prova.analisi.security;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -11,12 +12,13 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
+@Component
 public class JWTUtil {
 
 	@Value("${jwt-secret}")
 	private String secret;
 
-	@Value("${jwt-expiration}")
+	@Value("${jwt.expiration}")
 	private Long jwtExpirationMs;
 
 	// Method to sign and create a JWT using the injected secret
