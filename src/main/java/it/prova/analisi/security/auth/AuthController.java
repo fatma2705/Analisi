@@ -1,4 +1,4 @@
-package it.prova.analisi.securityit.auth;
+package it.prova.analisi.security.auth;
 
 import java.util.Collection;
 import java.util.Collections;
