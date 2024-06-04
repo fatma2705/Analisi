@@ -46,8 +46,15 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public void aggiorna(Utente utenteInstance) {
-		// TODO Auto-generated method stub
-
+		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
+		if (utenteReloaded == null)
+			throw new RuntimeException("Utente non trovato");
+		utenteReloaded.setNome(utenteInstance.getNome());
+		utenteReloaded.setCognome(utenteInstance.getCognome());
+		utenteReloaded.setCodiceFiscale(utenteInstance.getCodiceFiscale());
+		utenteReloaded.setEmail(utenteInstance.getEmail());
+		utenteReloaded.setRuoli(utenteInstance.getRuoli());
+		utenteRepository.save(utenteReloaded);
 	}
 
 	@Override
@@ -65,41 +72,34 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public void rimuovi(Long idToRemove) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<Utente> findByExample(Utente example) {
-		// TODO Auto-generated method stub
-		return null;
+		utenteRepository.deleteById(idToRemove);
 	}
 
 	@Override
 	public Utente findByUsernameAndPassword(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		return utenteRepository.findByUsernameAndPasswordAndAttivo(username, password, true);
 	}
 
 	@Override
 	public Utente eseguiAccesso(String username, String password) {
 		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
 		Utente user = optionalUser.get();
-		if(user != null && passwordEncoder.matches(password, user.getPassword()))
+		if (user != null && passwordEncoder.matches(password, user.getPassword()))
 			return user;
 		return null;
 	}
 
 	@Override
 	public void changeUserAbilitation(Long utenteInstanceId) {
-		// TODO Auto-generated method stub
-
+		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
+		if (utenteInstance == null)
+			throw new RuntimeException("Utente non trovato");
+		utenteInstance.setAttivo(false);
 	}
 
 	@Override
 	public Utente findByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return utenteRepository.findByUsername(username).orElse(null);
 	}
 
 }
