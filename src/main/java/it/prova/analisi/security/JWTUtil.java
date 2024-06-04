@@ -1,7 +1,9 @@
 package it.prova.analisi.security;
 
 import java.util.Date;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +14,14 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
+import it.prova.analisi.model.Utente;
+import it.prova.analisi.repository.utente.UtenteRepository;
+
 @Component
 public class JWTUtil {
+	
+	@Autowired
+	private UtenteRepository utenteRepository;
 
 	@Value("${jwt-secret}")
 	private String secret;
@@ -23,8 +31,14 @@ public class JWTUtil {
 
 	// Method to sign and create a JWT using the injected secret
 	public String generateToken(String username) throws IllegalArgumentException, JWTCreationException {
-		return JWT.create().withSubject("User Details").withClaim("username", username).withIssuedAt(new Date())
-				.withIssuer("ANALISI").withExpiresAt(new Date((new Date()).getTime() + jwtExpirationMs))
+		Utente utente = utenteRepository.findByUsername(username);
+		return JWT.create()
+				.withSubject("User Details")
+				.withClaim("username", username)
+				.withClaim("email", utente.getEmail())
+				.withIssuedAt(new Date())
+				.withIssuer("ANALISI")
+				.withExpiresAt(new Date((new Date()).getTime() + jwtExpirationMs))
 				.sign(Algorithm.HMAC256(secret));
 
 	}

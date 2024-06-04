@@ -1,24 +1,32 @@
 package it.prova.analisi.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.analisi.model.Ruolo;
 import it.prova.analisi.model.Utente;
+import it.prova.analisi.repository.ruolo.RuoloRepository;
 import it.prova.analisi.repository.utente.UtenteRepository;
+import it.prova.analisi.web.api.exception.IdNotNullForInsertException;
 
 @Service
-@Transactional(readOnly = true)
-public class UtenteServiceImpl implements UtenteService{
-	
-	@Autowired 
+@Transactional
+public class UtenteServiceImpl implements UtenteService {
+
+	@Autowired
 	private UtenteRepository uteteRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RuoloRepository ruoloRepository;
 
 	@Override
 	public List<Utente> listAllUtenti() {
@@ -38,19 +46,26 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	public void aggiorna(Utente utenteInstance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void inserisciNuovo(Utente utenteInstance) {
-		// TODO Auto-generated method stub
-		
+		if (utenteInstance.getId() != null) {
+			throw new IdNotNullForInsertException("Id must be null for insert operation");
+		}
+		Set<Ruolo> ruoli = new HashSet<Ruolo>();
+		ruoli.add(ruoloRepository.findByDescrizioneAndCodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
+		utenteInstance.setRuoli(ruoli);
+		utenteInstance.setAttivo(true);
+		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
+		uteteRepository.save(utenteInstance);
 	}
 
 	@Override
 	public void rimuovi(Long idToRemove) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -67,14 +82,16 @@ public class UtenteServiceImpl implements UtenteService{
 
 	@Override
 	public Utente eseguiAccesso(String username, String password) {
-		// TODO Auto-generated method stub
+		Utente user = uteteRepository.findByUsername(username);
+		if(user != null && passwordEncoder.matches(password, user.getPassword()))
+			return user;
 		return null;
 	}
 
 	@Override
 	public void changeUserAbilitation(Long utenteInstanceId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

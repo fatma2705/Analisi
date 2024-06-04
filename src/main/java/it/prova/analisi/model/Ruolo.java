@@ -37,4 +37,9 @@ public class Ruolo {
 		this.id = id;
 	}
 
+	public Ruolo(String descrizione, String codice) {
+		this.descrizione = descrizione;
+		this.codice = codice;
+	}
+
 }
