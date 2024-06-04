@@ -67,4 +67,12 @@ public class Utente {
 		this.attivo = attivo;
 	}
 
+	public boolean isAdmin() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))
+				return true;
+		}
+		return false;
+	}
+
 }
