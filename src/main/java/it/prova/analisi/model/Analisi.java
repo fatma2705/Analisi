@@ -42,4 +42,10 @@ public class Analisi {
 	@JoinColumn(name = "paziente_id", nullable = true)
 	private Utente paziente;
 
+	public Analisi(Boolean esitoPositivo, TipoAnalisi tipo, LocalDate data) {
+		this.esitoPositivo = esitoPositivo;
+		this.tipo = tipo;
+		this.data = data;
+	}
+
 }

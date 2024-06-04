@@ -23,11 +23,16 @@ public class AnalisiDTO {
 	private TipoAnalisi tipo;
 	@NotNull(message = "data.notnull")
 	private LocalDate data;
-	@NotNull(message = "paziente.notnull")
 	private UtenteDTO paziente;
 
 	public Analisi builsAnalisiModel() {
-		return new Analisi(this.id, this.esitoPositivo, this.tipo, this.data, null);
+		return Analisi.builder().
+				id(this.id)
+				.esitoPositivo(esitoPositivo)
+				.tipo(tipo)
+				.data(data)
+				.paziente(paziente == null? null : paziente.buildUtenteModel(false))
+				.build();
 	}
 
 	public static AnalisiDTO buildAnalisiDTOFromModel(Analisi model) {
