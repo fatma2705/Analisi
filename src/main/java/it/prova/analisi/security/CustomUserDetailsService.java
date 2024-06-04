@@ -1,6 +1,7 @@
 package it.prova.analisi.security;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Utente user = utenteRepository.findByUsername(username); () -> new UsernameNotFoundException("Username " + username + " not found"));
+		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
+		Utente user = optionalUser.orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"));
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				user.getAttivo(), true, true, !user.getAttivo(), getAuthorities(user));
 	}

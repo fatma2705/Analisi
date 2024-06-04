@@ -2,6 +2,7 @@ package it.prova.analisi.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import it.prova.analisi.web.api.exception.IdNotNullForInsertException;
 public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
-	private UtenteRepository uteteRepository;
+	private UtenteRepository utenteRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -30,17 +31,17 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public List<Utente> listAllUtenti() {
-		return (List<Utente>) uteteRepository.findAll();
+		return (List<Utente>) utenteRepository.findAll();
 	}
 
 	@Override
 	public Utente caricaSingoloUtente(Long id) {
-		return uteteRepository.findById(id).orElse(null);
+		return utenteRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Utente caricaSingoloUtenteConRuoli(Long id) {
-		return uteteRepository.fingByIdConRuoli(id).orElse(null);
+		return utenteRepository.fingByIdConRuoli(id).orElse(null);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteInstance.setRuoli(ruoli);
 		utenteInstance.setAttivo(true);
 		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
-		uteteRepository.save(utenteInstance);
+		utenteRepository.save(utenteInstance);
 	}
 
 	@Override
@@ -82,7 +83,8 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public Utente eseguiAccesso(String username, String password) {
-		Utente user = uteteRepository.findByUsername(username);
+		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
+		Utente user = optionalUser.get();
 		if(user != null && passwordEncoder.matches(password, user.getPassword()))
 			return user;
 		return null;

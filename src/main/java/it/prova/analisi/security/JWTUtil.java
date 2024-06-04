@@ -31,7 +31,8 @@ public class JWTUtil {
 
 	// Method to sign and create a JWT using the injected secret
 	public String generateToken(String username) throws IllegalArgumentException, JWTCreationException {
-		Utente utente = utenteRepository.findByUsername(username);
+		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
+		Utente utente = optionalUser.get();
 		return JWT.create()
 				.withSubject("User Details")
 				.withClaim("username", username)

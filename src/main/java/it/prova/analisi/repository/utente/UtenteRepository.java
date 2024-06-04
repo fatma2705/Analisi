@@ -11,7 +11,7 @@ import it.prova.analisi.model.Utente;
 public interface UtenteRepository extends CrudRepository<Utente, Long> {
 
 	@EntityGraph(attributePaths = { "ruoli" })
-	Utente findByUsername(String username);
+	Optional<Utente> findByUsername(String username);
 
 	@Query("from Utente u left join fetch u.ruoli where u.id = ?1")
 	Optional<Utente> fingByIdConRuoli(Long id);
