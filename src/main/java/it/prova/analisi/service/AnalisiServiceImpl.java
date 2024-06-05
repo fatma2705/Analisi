@@ -11,8 +11,6 @@ import it.prova.analisi.model.Analisi;
 import it.prova.analisi.model.Utente;
 import it.prova.analisi.repository.analisi.AnalisiRepository;
 import it.prova.analisi.repository.utente.UtenteRepository;
-import it.prova.analisi.web.api.exception.AnalisiPazienteAlreadyValorizedException;
-import it.prova.analisi.web.api.exception.AnalisiWithoutPazienteException;
 import it.prova.analisi.web.api.exception.ElementNotFoundException;
 import it.prova.analisi.web.api.exception.IdNotNullForInsertException;
 import it.prova.analisi.web.api.exception.NotSamePazienteException;
@@ -70,8 +68,13 @@ public class AnalisiServiceImpl implements AnalisiService {
 
 	@Override
 	public Analisi aggiorna(Analisi input, String username) {
-		if (input.getPaziente() == null)
-			throw new AnalisiWithoutPazienteException("This Analisi doesn't have a paziente associated to it.");
+		if (analisiRepository.findById(input.getId()) == null)
+			throw new ElementNotFoundException("Couldn't find analisi with id:" + input.getId());
+		if (input.getPaziente() == null) {
+				Optional<Utente> pazienteOptional = utenteRepository.findByUsername(username);
+				Utente paziente = pazienteOptional.get();
+				input.setPaziente(paziente);
+			}
 		if (!input.getPaziente().getUsername().equals(username))
 			throw new NotSamePazienteException("The current Paziente and the Analisi's paziente are not the same");
 		input.setPaziente(utenteRepository.findByUsername(username).orElse(null));
