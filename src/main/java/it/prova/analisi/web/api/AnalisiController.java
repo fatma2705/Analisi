@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.prova.analisi.dto.AnalisiDTO;
 import it.prova.analisi.model.Analisi;
-import it.prova.analisi.repository.utente.UtenteRepository;
 import it.prova.analisi.service.AnalisiService;
 import jakarta.validation.Valid;
 
@@ -47,6 +48,12 @@ public class AnalisiController {
 		Analisi analisi = input.builsAnalisiModel();
 		analisi = analisiservice.inserisciNuova(analisi, principal.getName());
 		return AnalisiDTO.buildAnalisiDTOFromModel(analisi);
+	}
+	
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable(name = "id",required = true) Long id,Principal principal) {
+		analisiservice.delete(id, principal.getName());
 	}
 	
 	
