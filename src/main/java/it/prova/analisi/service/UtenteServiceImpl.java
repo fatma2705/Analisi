@@ -80,16 +80,16 @@ public class UtenteServiceImpl implements UtenteService {
 		return utenteRepository.findByUsernameAndPasswordAndAttivo(username, password, true);
 	}
 
-	@Override
-	public Utente eseguiAccesso(String username, String password) {
-		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
-		Utente user = optionalUser.get();
-		if (user != null && passwordEncoder.matches(password, user.getPassword()))
-			return user;
-		return null;
-	}
-
-	@Override
+		@Override
+		public Utente eseguiAccesso(String username, String password) {
+			Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
+			Utente user = optionalUser.get();
+			if (user != null && passwordEncoder.matches(password, user.getPassword()))
+				return user;
+			return null;
+		}
+	
+		@Override
 	public void changeUserAbilitation(Long utenteInstanceId) {
 		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
 		if (utenteInstance == null)
