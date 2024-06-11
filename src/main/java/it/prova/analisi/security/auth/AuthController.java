@@ -29,7 +29,6 @@ public class AuthController {
 	@Autowired
 	private UtenteService utenteService;
 	
-	 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 	@PostMapping("/login")
 	public Map<String, Object> loginHandler(@RequestBody UtenteAuthDTO body) {
 		try {
@@ -53,7 +52,6 @@ public class AuthController {
 		}
 
 	}
-	
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void register(@RequestBody UtenteDTO nuovoUtente) {
