@@ -70,6 +70,7 @@ public class UtenteServiceImpl implements UtenteService {
 		if (!(utenteInstance.getPassword().equals(utenteInstance.getConfermaPassword()))){
 			throw new PasswordMismatchException("Passwords do not match. Please ensure both password fields are identical");
 		}
+		utenteInstance.setConfermaPassword(passwordEncoder.encode(utenteInstance.getConfermaPassword()));
 		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
 		utenteRepository.save(utenteInstance);
 	}
