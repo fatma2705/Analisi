@@ -35,6 +35,9 @@ public class Utente {
 
 	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "conferma_password")
+	private String confermaPassword;
 
 	@Column(name = "email")
 	private String email;
@@ -55,7 +58,7 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "id"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
-	public Utente(Long id, String username, String password, String email, String nome, String cognome,
+	public Utente(Long id, String username, String password, String confermaPassword , String email, String nome, String cognome,
 			String codiceFiscale, Boolean attivo) {
 		this.id = id;
 		this.username = username;
@@ -65,6 +68,8 @@ public class Utente {
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
 		this.attivo = attivo;
+		this.confermaPassword = confermaPassword;
+				
 	}
 
 	public boolean isAdmin() {

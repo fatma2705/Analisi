@@ -28,6 +28,9 @@ public class UtenteDTO {
 	@NotBlank(message = "{password.notblank}")
 	@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
 	private String password;
+	
+	@NotBlank(message = "{confermaPassword.notblank}")
+	private String confermaPassword;
 
 	@NotBlank(message = "{email.notblank}")
 	private String email;
@@ -58,7 +61,7 @@ public class UtenteDTO {
 	}
 
 	public Utente buildUtenteModel(boolean includeIdRoles) {
-		Utente res = new Utente(id, username, password, email, nome, cognome, codiceFiscale, attivo);
+		Utente res = new Utente(id, username, password, confermaPassword , email, nome, cognome, codiceFiscale, attivo);
 		if (includeIdRoles && ruoliIds != null)
 			res.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
 		return res;

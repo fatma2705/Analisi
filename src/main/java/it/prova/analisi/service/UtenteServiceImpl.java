@@ -15,6 +15,7 @@ import it.prova.analisi.model.Utente;
 import it.prova.analisi.repository.ruolo.RuoloRepository;
 import it.prova.analisi.repository.utente.UtenteRepository;
 import it.prova.analisi.web.api.exception.IdNotNullForInsertException;
+import it.prova.analisi.web.api.exception.PasswordMismatchException;
 
 @Service
 @Transactional
@@ -66,6 +67,9 @@ public class UtenteServiceImpl implements UtenteService {
 		ruoli.add(ruoloRepository.findByDescrizioneAndCodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
 		utenteInstance.setRuoli(ruoli);
 		utenteInstance.setAttivo(true);
+		if (!(utenteInstance.getPassword().equals(utenteInstance.getConfermaPassword()))){
+			throw new PasswordMismatchException("Passwords do not match. Please ensure both password fields are identical");
+		}
 		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
 		utenteRepository.save(utenteInstance);
 	}
