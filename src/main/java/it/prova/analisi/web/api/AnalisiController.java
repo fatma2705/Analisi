@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import it.prova.analisi.model.Analisi;
 import it.prova.analisi.service.AnalisiService;
 import jakarta.validation.Valid;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/analisi")
 public class AnalisiController {
@@ -58,7 +60,7 @@ public class AnalisiController {
 	}
 
 	@PutMapping
-	public AnalisiDTO aggiorna(@Valid @RequestBody AnalisiDTO input,Principal principal) {
+	public AnalisiDTO aggiorna(@Valid @RequestBody AnalisiDTO input, Principal principal) {
 		Analisi aggiornata = input.builsAnalisiModel();
 		aggiornata = analisiservice.aggiorna(aggiornata, principal.getName());
 		return AnalisiDTO.buildAnalisiDTOFromModel(aggiornata);

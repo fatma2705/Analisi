@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,26 +41,28 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean // Indicates that this method returns a Spring bean.
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable()) // Disables CSRF protection, common in stateless REST APIs.
-				.cors(cors -> cors.disable()).authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("api/utente/userInfo").authenticated()
-						.requestMatchers("/api/utente/**","/api/agenda/listAll").hasRole("ADMIN")
-						.requestMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
-						.anyRequest().authenticated() // Ensures
-																														// all
-																														// requests
-																														// are
-																														// authenticated.
-				).httpBasic(withDefaults()) // Enables HTTP Basic Authentication with default settings.
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Configures
-		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class );																				// session
-																												// management
-																												// to be
-																												// stateless.
-		return http.build(); // Builds and returns the SecurityFilterChain.
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("http://localhost:4200");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
 
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable()).cors(withDefaults())	
+				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("api/utente/userInfo").authenticated()
+						.requestMatchers("/api/utente/**", "/api/agenda/listAll").hasRole("ADMIN")
+						.requestMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER").anyRequest().authenticated())
+				.httpBasic(withDefaults())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		return http.build();
+	}
 }

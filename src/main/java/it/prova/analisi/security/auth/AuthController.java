@@ -44,7 +44,7 @@ public class AuthController {
 			}
 			
 			// Respond with the JWT
-			return Collections.singletonMap("jwt.token", token);
+			return Collections.singletonMap("jwt", token);
 			
 		} catch (AuthenticationException authExc) {
 			// Auhentication Failed
