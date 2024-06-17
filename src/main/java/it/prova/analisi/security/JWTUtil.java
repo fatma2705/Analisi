@@ -36,7 +36,7 @@ public class JWTUtil {
 		return JWT.create()
 				.withSubject("User Details")
 				.withClaim("username", username)
-				.withClaim("email", utente.getEmail())
+				.withClaim("nome", utente.getNome())
 				.withIssuedAt(new Date())
 				.withIssuer("ANALISI")
 				.withExpiresAt(new Date((new Date()).getTime() + jwtExpirationMs))
