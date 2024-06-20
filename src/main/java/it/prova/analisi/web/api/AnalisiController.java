@@ -58,6 +58,11 @@ public class AnalisiController {
 	public void delete(@PathVariable(name = "id", required = true) Long id, Principal principal) {
 		analisiservice.delete(id, principal.getName());
 	}
+	
+	@GetMapping("/{id}")
+	public AnalisiDTO getById(@PathVariable(name = "id", required = true) Long id, Principal principal) {
+		return AnalisiDTO.buildAnalisiDTOFromModel( analisiservice.findById(id, principal.getName()));
+	}
 
 	@PutMapping
 	public AnalisiDTO aggiorna(@Valid @RequestBody AnalisiDTO input, Principal principal) {
