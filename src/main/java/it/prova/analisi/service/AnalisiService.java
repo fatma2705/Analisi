@@ -17,5 +17,7 @@ public List<Analisi> listAll();
 	public Analisi aggiorna(Analisi input, String username);
 	
 	public void delete(Long id, String username);
+	
+	public List<Analisi> findByExample(Analisi example,String username);
 
 }

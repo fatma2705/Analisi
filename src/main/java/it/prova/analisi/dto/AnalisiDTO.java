@@ -26,13 +26,8 @@ public class AnalisiDTO {
 	private UtenteDTO paziente;
 
 	public Analisi builsAnalisiModel() {
-		return Analisi.builder().
-				id(this.id)
-				.esitoPositivo(esitoPositivo)
-				.tipo(tipo)
-				.data(data)
-				.paziente(paziente == null? null : paziente.buildUtenteModel(false))
-				.build();
+		return Analisi.builder().id(this.id).esitoPositivo(esitoPositivo).tipo(tipo).data(data)
+				.paziente(paziente == null ? null : paziente.buildUtenteModel(false)).build();
 	}
 
 	public static AnalisiDTO buildAnalisiDTOFromModel(Analisi model) {
