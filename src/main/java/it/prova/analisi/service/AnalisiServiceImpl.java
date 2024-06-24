@@ -2,6 +2,7 @@ package it.prova.analisi.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -53,18 +54,11 @@ public class AnalisiServiceImpl implements AnalisiService {
 
 	@Override
 	public Analisi inserisciNuova(Analisi input, String username) {
-		if (input.getId() != null)
+		Utente paziente = utenteRepository.findByUsername(username).orElse(null);
+		if (input.getId() != null) {
 			throw new IdNotNullForInsertException("Id must be null for this operation");
-		if (input.getPaziente().getUsername() != username && input.getPaziente().isAdmin()) {
-			analisiRepository.save(input);
-		} else {
-			throw new NotSamePazienteException("The current Paziente and the Analisi's Paziente Are not the same");
 		}
-		if (input.getPaziente() == null) {
-			Optional<Utente> pazienteOptional = utenteRepository.findByUsername(username);
-			Utente paziente = pazienteOptional.get();
-			input.setPaziente(paziente);
-		}
+		input.setPaziente(paziente);
 		return analisiRepository.save(input);
 	}
 
@@ -95,26 +89,38 @@ public class AnalisiServiceImpl implements AnalisiService {
 
 	@Override
 	public List<Analisi> findByExample(Analisi example, String username) {
+		System.out.println("Esempio di AnalisiDTO: " + example);
+		System.out.println("Nome utente dal Principal: " + username);
+
 		Optional<Utente> pazienteOptional = utenteRepository.findByUsername(username);
+		if (!pazienteOptional.isPresent()) {
+			throw new ElementNotFoundException("Username not found: " + username);
+		}
 		Utente paziente = pazienteOptional.get();
-		ExampleMatcher matcher = ExampleMatcher.matchingAll()
-				.withMatcher("tipo", ExampleMatcher.GenericPropertyMatchers.exact())
-				.withMatcher("data", ExampleMatcher.GenericPropertyMatchers.exact())
-				.withMatcher("esitoPositivo", ExampleMatcher.GenericPropertyMatchers.exact()).withIgnoreNullValues();
 
-		// Crea l'istanza di Example
-		Example<Analisi> analisiExample = Example.of(example, matcher);
+		if (example.getPaziente() == null) {
+			example.setPaziente(paziente);
+		}
 
-		// Usa il repository per trovare tutte le analisi che corrispondono all'esempio
-		List<Analisi> analisi = (List<Analisi>) analisiRepository.findAll(analisiExample);
-//		if (example.getPaziente().isAdmin())
-//			return analisi;
-//		else if (example.getPaziente().getId() == paziente.getId())
-//			return analisi;
-//		else
-//			throw new NotSamePazienteException("The current Paziente and the Analisi's paziente are not the same");
-		return analisi;
+		// Usa la query personalizzata per trovare le analisi
+		List<Analisi> analisiList = analisiRepository.findByExample(example.getPaziente().getUsername(), // Passa il
+																											// nome
+																											// utente
+																											// del
+																											// paziente
+				example.getEsitoPositivo(), example.getTipo(), example.getData());
 
+		System.out.println("Risultato della ricerca: " + analisiList);
+
+		// Filtra i risultati basati sul ruolo del paziente o sulla proprietà
+		List<Analisi> filteredAnalisi = analisiList.stream()
+				.filter(a -> a.getPaziente().isAdmin() || a.getPaziente().getUsername().equals(username))
+				.collect(Collectors.toList());
+
+		if (filteredAnalisi.isEmpty()) {
+			throw new NotSamePazienteException("Il paziente corrente e il paziente dell'analisi non corrispondono");
+		}
+
+		return filteredAnalisi;
 	}
-
 }

@@ -26,6 +26,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/analisi")
 public class AnalisiController {
+	
 
 	@Autowired
 	private AnalisiService analisiService;
@@ -73,6 +74,7 @@ public class AnalisiController {
 
 	@PostMapping("/search")
 	public List<AnalisiDTO> searchAnalisi(@RequestBody AnalisiDTO example, Principal principal) {
+		System.out.println("api search" + principal.getName());
 		Analisi analisiModel = example.builsAnalisiModel();
 		return analisiService.findByExample(analisiModel, principal.getName()).stream().map(analisi -> {
 			return AnalisiDTO.buildAnalisiDTOFromModel(analisi);

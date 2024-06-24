@@ -3,6 +3,9 @@ package it.prova.analisi.dto;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import it.prova.analisi.model.Ruolo;
 import it.prova.analisi.model.Utente;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(value = Include.NON_NULL)
 public class UtenteDTO {
 
 	private Long id;

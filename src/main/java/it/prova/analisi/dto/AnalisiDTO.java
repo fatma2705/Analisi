@@ -2,6 +2,9 @@ package it.prova.analisi.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import it.prova.analisi.model.Analisi;
 import it.prova.analisi.model.TipoAnalisi;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(value = Include.NON_NULL)
 public class AnalisiDTO {
 
 	private Long id;
@@ -32,7 +36,7 @@ public class AnalisiDTO {
 
 	public static AnalisiDTO buildAnalisiDTOFromModel(Analisi model) {
 		return new AnalisiDTO(model.getId(), model.getEsitoPositivo(), model.getTipo(), model.getData(),
-				UtenteDTO.buildUtenteDTOFromModel(model.getPaziente()));
+				UtenteDTO.builder().id(model.getPaziente().getId()).build());
 	}
 
 }
