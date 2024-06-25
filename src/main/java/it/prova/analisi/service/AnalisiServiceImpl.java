@@ -89,8 +89,6 @@ public class AnalisiServiceImpl implements AnalisiService {
 
 	@Override
 	public List<Analisi> findByExample(Analisi example, String username) {
-		System.out.println("Esempio di AnalisiDTO: " + example);
-		System.out.println("Nome utente dal Principal: " + username);
 
 		Optional<Utente> pazienteOptional = utenteRepository.findByUsername(username);
 		if (!pazienteOptional.isPresent()) {
@@ -110,16 +108,14 @@ public class AnalisiServiceImpl implements AnalisiService {
 																											// paziente
 				example.getEsitoPositivo(), example.getTipo(), example.getData());
 
-		System.out.println("Risultato della ricerca: " + analisiList);
-
 		// Filtra i risultati basati sul ruolo del paziente o sulla proprietà
 		List<Analisi> filteredAnalisi = analisiList.stream()
 				.filter(a -> a.getPaziente().isAdmin() || a.getPaziente().getUsername().equals(username))
 				.collect(Collectors.toList());
-
-		if (filteredAnalisi.isEmpty()) {
-			throw new NotSamePazienteException("Il paziente corrente e il paziente dell'analisi non corrispondono");
-		}
+//
+//		if (filteredAnalisi.isEmpty()) {
+//			throw new NotSamePazienteException("Il paziente corrente e il paziente dell'analisi non corrispondono");
+//		}
 
 		return filteredAnalisi;
 	}
