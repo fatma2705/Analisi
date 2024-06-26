@@ -63,9 +63,11 @@ public class UtenteServiceImpl implements UtenteService {
 		if (utenteInstance.getId() != null) {
 			throw new IdNotNullForInsertException("Id must be null for insert operation");
 		}
-		Set<Ruolo> ruoli = new HashSet<Ruolo>();
-		ruoli.add(ruoloRepository.findByDescrizioneAndCodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
-		utenteInstance.setRuoli(ruoli);
+		if (utenteInstance.getRuoli() == null) {
+			Set<Ruolo> ruoli = new HashSet<Ruolo>();
+			ruoli.add(ruoloRepository.findByDescrizioneAndCodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
+			utenteInstance.setRuoli(ruoli);
+		}
 		utenteInstance.setAttivo(true);
 		if (!(utenteInstance.getPassword().equals(utenteInstance.getConfermaPassword()))){
 			throw new PasswordMismatchException("Passwords do not match. Please ensure both password fields are identical");

@@ -14,6 +14,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
+import it.prova.analisi.model.Ruolo;
 import it.prova.analisi.model.Utente;
 import it.prova.analisi.repository.utente.UtenteRepository;
 
@@ -33,10 +34,15 @@ public class JWTUtil {
 	public String generateToken(String username) throws IllegalArgumentException, JWTCreationException {
 		Optional<Utente> optionalUser = utenteRepository.findByUsername(username);
 		Utente utente = optionalUser.get();
+		String[] ruoliArray = utente.getRuoli().stream()
+                .map(Ruolo::getCodice)
+                .toArray(String[]::new); // Converti in array di Stringhe
+
 		return JWT.create()
 				.withSubject("User Details")
 				.withClaim("username", username)
 				.withClaim("nome", utente.getNome())
+				.withArrayClaim("currentUser", ruoliArray)
 				.withIssuedAt(new Date())
 				.withIssuer("ANALISI")
 				.withExpiresAt(new Date((new Date()).getTime() + jwtExpirationMs))

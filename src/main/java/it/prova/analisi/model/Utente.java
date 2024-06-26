@@ -71,6 +71,20 @@ public class Utente {
 		this.confermaPassword = confermaPassword;
 				
 	}
+	
+	public Utente(String username, String password, String confermaPassword , String email, String nome, String cognome,
+			String codiceFiscale, Boolean attivo,Set<Ruolo> ruoli) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+		this.attivo = attivo;
+		this.confermaPassword = confermaPassword;
+		this.ruoli = ruoli;
+		
+	}
 
 	public boolean isAdmin() {
 		for (Ruolo ruoloItem : ruoli) {
@@ -79,5 +93,7 @@ public class Utente {
 		}
 		return false;
 	}
+
+	
 
 }
