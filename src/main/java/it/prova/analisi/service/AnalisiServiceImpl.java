@@ -43,7 +43,7 @@ public class AnalisiServiceImpl implements AnalisiService {
 		Optional<Utente> pazienteOptional = utenteRepository.findByUsername(username);
 		Utente paziente = pazienteOptional.get();
 		Analisi analisi = analisiRepository.findByIdEager(id);
-		if (analisi.getPaziente().isAdmin())
+		if (paziente.isAdmin())
 			return analisi;
 		else if (analisi.getPaziente().getId() == paziente.getId())
 			return analisi;
