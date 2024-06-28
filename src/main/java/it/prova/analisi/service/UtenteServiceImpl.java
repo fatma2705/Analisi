@@ -46,7 +46,7 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Override
-	public void aggiorna(Utente utenteInstance) {
+	public Utente aggiorna(Utente utenteInstance) {
 		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
 		if (utenteReloaded == null)
 			throw new RuntimeException("Utente non trovato");
@@ -55,7 +55,7 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteReloaded.setCodiceFiscale(utenteInstance.getCodiceFiscale());
 		utenteReloaded.setEmail(utenteInstance.getEmail());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
-		utenteRepository.save(utenteReloaded);
+		return utenteRepository.save(utenteReloaded);
 	}
 
 	@Override
@@ -108,5 +108,7 @@ public class UtenteServiceImpl implements UtenteService {
 	public Utente findByUsername(String username) {
 		return utenteRepository.findByUsername(username).orElse(null);
 	}
+	
+	
 
 }
